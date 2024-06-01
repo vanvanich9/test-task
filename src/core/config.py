@@ -10,7 +10,7 @@ logging_config.dictConfig(LOGGING)
 
 
 class Settings(BaseSettings):
-    project_name: str = Field(default='auth', validation_alias='PROJECT_NAME')
+    project_name: str = Field(default='service', validation_alias='PROJECT_NAME')
     debug: bool = Field(default=False, validation_alias='DEBUG')
 
     base_dir: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
