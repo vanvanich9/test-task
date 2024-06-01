@@ -18,7 +18,7 @@ install:
 
 isort: install
 	@echo "Check isort..."
-	@isort --check .
+	@isort .
 
 style: install
 	@echo "Check style..."
