@@ -34,7 +34,7 @@ with open(TEST_HANDS_ABOVE_HEAD_IMAGE_2_PATH, "rb") as file:
     )
 TEST_HANDS_ABOVE_HEAD_IMAGE_2_RESPONSE = Response(
     status=HTTPStatus.NOT_FOUND,
-    body={"detail": "Person not found."}
+    body={"detail": "Hands above head not found."}
 )
 
 TEST_HANDS_ABOVE_HEAD_IMAGE_3_PATH = (
@@ -68,7 +68,7 @@ with open(TEST_HANDS_ABOVE_HEAD_IMAGE_4_PATH, "rb") as file:
     )
 TEST_HANDS_ABOVE_HEAD_IMAGE_4_RESPONSE = Response(
     status=HTTPStatus.NOT_FOUND,
-    body={"detail": "Person not found."}
+    body={"detail": "Hands above head not found."}
 )
 
 TEST_HANDS_ABOVE_HEAD_IMAGE_5_PATH = (
@@ -85,7 +85,24 @@ with open(TEST_HANDS_ABOVE_HEAD_IMAGE_5_PATH, "rb") as file:
     )
 TEST_HANDS_ABOVE_HEAD_IMAGE_5_RESPONSE = Response(
     status=HTTPStatus.BAD_REQUEST,
-    body={"detail": "Too many persons."}
+    body={"detail": "Too many hands above head(-s)."}
+)
+
+TEST_HANDS_ABOVE_HEAD_IMAGE_6_PATH = (
+    test_settings.base_dir /
+    "functional" /
+    "testdata" /
+    "images" /
+    "data" /
+    "test_hands_above_head_image_6.jpg"
+)
+with open(TEST_HANDS_ABOVE_HEAD_IMAGE_6_PATH, "rb") as file:
+    TEST_HANDS_ABOVE_HEAD_IMAGE_6_REQUEST = Request(
+        files=[{"content": file.read(), "content_type": "image/jpeg"}]
+    )
+TEST_HANDS_ABOVE_HEAD_IMAGE_6_RESPONSE = Response(
+    status=HTTPStatus.NOT_FOUND,
+    body={"detail": "Hands above head not found."}
 )
 
 TEST_HANDS_ABOVE_HEAD_NOT_IMAGE_PATH = (
