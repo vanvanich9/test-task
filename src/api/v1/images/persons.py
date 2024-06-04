@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, UploadFile
 
-
 from schemas.responses.images import ConfidenceResponse
 from services.image.person import PersonImageService, get_person_image_service
 
