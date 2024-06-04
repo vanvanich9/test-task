@@ -1,4 +1,5 @@
 import asyncio
+import io
 
 import aiohttp
 import pytest_asyncio
@@ -18,13 +19,19 @@ def event_loop():
 def make_request():
     async def inner(
         path: str,
-        params: dict | None = None,
         method: str = 'GET',
+        params: dict | None = None,
         headers: dict | None = None,
         cookies: dict | None = None,
-        json: dict | None = None,
+        files: list[dict] | None = None,
+        body: dict | None = None,
     ) -> Response:
         async with aiohttp.ClientSession() as session:
+            data = aiohttp.FormData()
+            for file in (files or []):
+                data.add_field(
+                    'file', io.BytesIO(file['content']), content_type=file['content_type']
+                )
             url = test_settings.app_url + path
             async with session.request(
                 method=method,
@@ -32,7 +39,8 @@ def make_request():
                 params=params,
                 headers=headers,
                 cookies=cookies,
-                json=json,
+                json=body,
+                data=data,
             ) as response:
                 body = await response.json()
                 status = response.status

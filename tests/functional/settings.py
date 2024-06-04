@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from pydantic import Field
 from pydantic_settings import BaseSettings
@@ -12,7 +13,7 @@ class TestSettings(BaseSettings):
     app_host: str = Field(default='127.0.0.1', validation_alias='APP_HOST')
     app_port: int = Field(default=8000, validation_alias='APP_PORT')
 
-    base_dir: str = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    base_dir: Path = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
     @property
     def app_url(self):
