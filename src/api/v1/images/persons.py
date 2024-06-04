@@ -20,8 +20,8 @@ async def hands_above_head(
     confidence = await image_service.confidence_hands_above_head(file)
 
     if len(confidence) == 0:
-        raise HTTPNotFound("Person not found.")
+        raise HTTPNotFound("Hands above head not found.")
     if len(confidence) > 1:
-        raise HTTPBadRequest("Too many persons.")
+        raise HTTPBadRequest("Too many hands above head(-s).")
 
     return ConfidenceResponse(confidence=confidence[0])
