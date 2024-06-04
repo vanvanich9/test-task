@@ -1,15 +1,15 @@
 name: Integration
 on: [pull_request]
 jobs:
-  style:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build
-        run: docker build -t style-${{ github.sha }} --target style .
-      - name: Style
-        run: docker run --rm style-${{ github.sha }}
+        run: docker build -t lint-${{ github.sha }} --target lint .
+      - name: Lint
+        run: docker run --rm lint-${{ github.sha }}
 
   isort:
     runs-on: ubuntu-latest

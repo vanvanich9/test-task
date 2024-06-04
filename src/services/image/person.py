@@ -1,18 +1,20 @@
 from functools import lru_cache
-from typing import IO
 
+from fastapi import UploadFile
+
+from ml.image.person import PersonClassesEnum, person_model
 from services.image.base import ImageService
 
 
 class PersonImageService(ImageService):
-    def __init__(self):
-        pass
-
-    async def similarity_hands_above_head(self, image: IO) -> float:
-        # TODO: Implement function in the next tasks
-        return 0.5
+    async def confidence_hands_above_head(self, file: UploadFile) -> list[float]:
+        contents = await file.read()
+        data_frame = self.run_model(model=person_model, contents=contents)
+        return data_frame[
+            data_frame['class'] == PersonClassesEnum.HANDS_ABOVE_HEAD
+        ]['confidence'].to_list()
 
 
 @lru_cache()
-def get_person_image_service():
+def get_person_image_service() -> PersonImageService:
     return PersonImageService()

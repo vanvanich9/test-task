@@ -2,3 +2,6 @@ fastapi==0.111.0
 pydantic_settings==2.2.1
 gunicorn==22.0.0
 torch==2.3.0
+opencv-python==4.9.0.80
+numpy==1.26.4
+pandas==2.2.2

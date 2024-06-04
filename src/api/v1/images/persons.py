@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, Depends, UploadFile
 
-from schemas.responses.images import SimilarityResponse
+from schemas.responses.images import ConfidenceResponse
 from services.image.person import PersonImageService, get_person_image_service
 
 router = APIRouter()
@@ -8,14 +8,13 @@ router = APIRouter()
 
 @router.post(
     "/hands-above-head",
-    summary="",
-    description="",
-    response_description="",
+    summary="Detect persons with hands above head",
+    description="Receive image and detect all persons with hands above head",
+    response_description="Number of persons with hands above head and confidences",
 )
 async def hands_above_head(
-    image: UploadFile = File(...),
+    file: UploadFile = Depends(PersonImageService.validate_file_image),
     image_service: PersonImageService = Depends(get_person_image_service),
 ):
-    await image_service.filter_file_image(image)
-    similarity = await image_service.similarity_hands_above_head(image)
-    return SimilarityResponse(similarity=similarity)
+    confidence = await image_service.confidence_hands_above_head(file)
+    return ConfidenceResponse(number=len(confidence), confidence=confidence)
