@@ -1,14 +1,16 @@
 FROM python:3.12-slim as core
 
 WORKDIR /opt/app
-RUN groupadd -r app-user && useradd -d /opt/app -r -g app-user app-user \
+
+RUN apt-get update \
+    && apt-get install gcc git ffmpeg libsm6 libxext6  -y \
+    && groupadd -r app-user && useradd -d /opt/app -r -g app-user app-user \
     && chown app-user:app-user -R /opt/app
 
 COPY requirements.txt ./requirements.txt
 
 RUN pip install --upgrade pip \
     && pip install -r requirements.txt
-
 
 FROM core as isort
 
@@ -18,7 +20,7 @@ USER app-user
 CMD ["isort", "--check", "."]
 
 
-FROM core as style
+FROM core as lint
 
 RUN pip install flake8==7.0.0
 COPY . .
@@ -27,6 +29,10 @@ CMD ["flake8", "."]
 
 
 FROM core as app
+
+RUN git clone https://github.com/ultralytics/yolov5 /opt/app/yolov5 \
+    && git config --global --add safe.directory /opt/app/yolov5 \
+    && pip install -r /opt/app/yolov5/requirements.txt
 
 EXPOSE 8000
 

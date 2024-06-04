@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
-class SimilarityResponse(BaseModel):
-    similarity: float = Field(ge=0, le=1)
+class ConfidenceResponse(BaseModel):
+    number: int
+    confidence: list[float]
