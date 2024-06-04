@@ -17,10 +17,7 @@ with open(TEST_HANDS_ABOVE_HEAD_IMAGE_1_PATH, "rb") as file:
     )
 TEST_HANDS_ABOVE_HEAD_IMAGE_1_RESPONSE = Response(
     status=HTTPStatus.OK,
-    body={
-        "number": 1,
-        "confidence": [0.811675488948822],
-    },
+    body={"confidence": 0.811675488948822},
 )
 
 TEST_HANDS_ABOVE_HEAD_IMAGE_2_PATH = (
@@ -36,11 +33,8 @@ with open(TEST_HANDS_ABOVE_HEAD_IMAGE_2_PATH, "rb") as file:
         files=[{"content": file.read(), "content_type": "image/jpeg"}]
     )
 TEST_HANDS_ABOVE_HEAD_IMAGE_2_RESPONSE = Response(
-    status=HTTPStatus.OK,
-    body={
-        "number": 0,
-        "confidence": [],
-    },
+    status=HTTPStatus.NOT_FOUND,
+    body={"detail": "Person not found."}
 )
 
 TEST_HANDS_ABOVE_HEAD_IMAGE_3_PATH = (
@@ -57,10 +51,7 @@ with open(TEST_HANDS_ABOVE_HEAD_IMAGE_3_PATH, "rb") as file:
     )
 TEST_HANDS_ABOVE_HEAD_IMAGE_3_RESPONSE = Response(
     status=HTTPStatus.OK,
-    body={
-        "number": 1,
-        "confidence": [0.6746120452880859],
-    },
+    body={"confidence": 0.6746120452880859},
 )
 
 TEST_HANDS_ABOVE_HEAD_IMAGE_4_PATH = (
@@ -76,9 +67,40 @@ with open(TEST_HANDS_ABOVE_HEAD_IMAGE_4_PATH, "rb") as file:
         files=[{"content": file.read(), "content_type": "image/jpeg"}]
     )
 TEST_HANDS_ABOVE_HEAD_IMAGE_4_RESPONSE = Response(
-    status=HTTPStatus.OK,
-    body={
-        "number": 0,
-        "confidence": [],
-    },
+    status=HTTPStatus.NOT_FOUND,
+    body={"detail": "Person not found."}
+)
+
+TEST_HANDS_ABOVE_HEAD_IMAGE_5_PATH = (
+    test_settings.base_dir /
+    "functional" /
+    "testdata" /
+    "images" /
+    "data" /
+    "test_hands_above_head_image_5.jpg"
+)
+with open(TEST_HANDS_ABOVE_HEAD_IMAGE_5_PATH, "rb") as file:
+    TEST_HANDS_ABOVE_HEAD_IMAGE_5_REQUEST = Request(
+        files=[{"content": file.read(), "content_type": "image/jpeg"}]
+    )
+TEST_HANDS_ABOVE_HEAD_IMAGE_5_RESPONSE = Response(
+    status=HTTPStatus.BAD_REQUEST,
+    body={"detail": "Too many persons."}
+)
+
+TEST_HANDS_ABOVE_HEAD_NOT_IMAGE_PATH = (
+    test_settings.base_dir /
+    "functional" /
+    "testdata" /
+    "images" /
+    "data" /
+    "test_hands_above_head_not_image.txt"
+)
+with open(TEST_HANDS_ABOVE_HEAD_NOT_IMAGE_PATH, "rb") as file:
+    TEST_HANDS_ABOVE_HEAD_NOT_IMAGE_REQUEST = Request(
+        files=[{"content": file.read(), "content_type": "text/plain"}]
+    )
+TEST_HANDS_ABOVE_HEAD_NOT_IMAGE_RESPONSE = Response(
+    status=HTTPStatus.BAD_REQUEST,
+    body={"detail": "Not image."}
 )

@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 import pytest
 
 from tests.functional.testdata.images.person import (
@@ -8,7 +10,11 @@ from tests.functional.testdata.images.person import (
     TEST_HANDS_ABOVE_HEAD_IMAGE_3_REQUEST,
     TEST_HANDS_ABOVE_HEAD_IMAGE_3_RESPONSE,
     TEST_HANDS_ABOVE_HEAD_IMAGE_4_REQUEST,
-    TEST_HANDS_ABOVE_HEAD_IMAGE_4_RESPONSE)
+    TEST_HANDS_ABOVE_HEAD_IMAGE_4_RESPONSE,
+    TEST_HANDS_ABOVE_HEAD_IMAGE_5_REQUEST,
+    TEST_HANDS_ABOVE_HEAD_IMAGE_5_RESPONSE,
+    TEST_HANDS_ABOVE_HEAD_NOT_IMAGE_REQUEST,
+    TEST_HANDS_ABOVE_HEAD_NOT_IMAGE_RESPONSE)
 from tests.functional.utils.schemas import Request, Response
 
 MAX_ERROR = 0.0001
@@ -20,6 +26,8 @@ MAX_ERROR = 0.0001
     (TEST_HANDS_ABOVE_HEAD_IMAGE_2_REQUEST, TEST_HANDS_ABOVE_HEAD_IMAGE_2_RESPONSE),
     (TEST_HANDS_ABOVE_HEAD_IMAGE_3_REQUEST, TEST_HANDS_ABOVE_HEAD_IMAGE_3_RESPONSE),
     (TEST_HANDS_ABOVE_HEAD_IMAGE_4_REQUEST, TEST_HANDS_ABOVE_HEAD_IMAGE_4_RESPONSE),
+    (TEST_HANDS_ABOVE_HEAD_IMAGE_5_REQUEST, TEST_HANDS_ABOVE_HEAD_IMAGE_5_RESPONSE),
+    (TEST_HANDS_ABOVE_HEAD_NOT_IMAGE_REQUEST, TEST_HANDS_ABOVE_HEAD_NOT_IMAGE_RESPONSE),
 ])
 async def test_hands_above_head(make_request, request_data: Request, expected_response: Response):
     response: Response = await make_request(
@@ -27,16 +35,7 @@ async def test_hands_above_head(make_request, request_data: Request, expected_re
     )
 
     assert response.status == expected_response.status
-    assert response.body['number'] == expected_response.body['number']
-
-    for confidence_value in response.body['confidence']:
-        assert min(
-            abs(another_confidence_value - confidence_value)
-            for another_confidence_value in expected_response.body['confidence']
-        ) <= MAX_ERROR
-
-    for confidence_value in expected_response.body['confidence']:
-        assert min(
-            abs(another_confidence_value - confidence_value)
-            for another_confidence_value in response.body['confidence']
-        ) <= MAX_ERROR
+    if response.status == HTTPStatus.OK:
+        assert abs(response.body['confidence'] - expected_response.body['confidence']) <= MAX_ERROR
+    else:
+        assert response.body['detail'] == expected_response.body['detail']

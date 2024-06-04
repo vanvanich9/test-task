@@ -27,7 +27,7 @@ class ImageService:
     @staticmethod
     async def validate_file_image(file: UploadFile = File(...)) -> UploadFile:
         if file.content_type not in ACCEPTED_FILE_TYPES:
-            raise HTTPBadRequest()
+            raise HTTPBadRequest("Not image.")
 
         return file
 
