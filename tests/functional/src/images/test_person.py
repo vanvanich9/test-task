@@ -11,6 +11,8 @@ from tests.functional.testdata.images.person import (
     TEST_HANDS_ABOVE_HEAD_IMAGE_4_RESPONSE)
 from tests.functional.utils.schemas import Request, Response
 
+MAX_ERROR = 0.0001
+
 
 @pytest.mark.asyncio()
 @pytest.mark.parametrize("request_data, expected_response", [
@@ -31,10 +33,10 @@ async def test_hands_above_head(make_request, request_data: Request, expected_re
         assert min(
             abs(another_confidence_value - confidence_value)
             for another_confidence_value in expected_response.body['confidence']
-        ) <= 0.0001
+        ) <= MAX_ERROR
 
     for confidence_value in expected_response.body['confidence']:
         assert min(
             abs(another_confidence_value - confidence_value)
             for another_confidence_value in response.body['confidence']
-        ) <= 0.0001
+        ) <= MAX_ERROR
