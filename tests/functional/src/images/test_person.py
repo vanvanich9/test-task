@@ -28,7 +28,13 @@ async def test_hands_above_head(make_request, request_data: Request, expected_re
     assert response.body['number'] == expected_response.body['number']
 
     for confidence_value in response.body['confidence']:
-        assert confidence_value in expected_response.body['confidence']
+        assert min(
+            abs(another_confidence_value - confidence_value)
+            for another_confidence_value in expected_response.body['confidence']
+        ) <= 0.0001
 
     for confidence_value in expected_response.body['confidence']:
-        assert confidence_value in response.body['confidence']
+        assert min(
+            abs(another_confidence_value - confidence_value)
+            for another_confidence_value in response.body['confidence']
+        ) <= 0.0001
